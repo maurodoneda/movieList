@@ -7,19 +7,27 @@ body{
 
 .navbar{
     background: #032541;
-    color: white;
     position: fixed;
     top: 0;
     z-index: 100;
     width: 100vw;
-    justify-content: start;
 }
+
+.navbar-brand{
+    color:#27b189;
+}    
 
 .nav-item{
-    margin-right: 30px;
-
+    margin-right: 20px;
+    color: white;
 }
 
+.navbar-toggler{
+    color: black;
+    background: rgba(39,177,137,0.7);
+
+
+}
 
 .searchBar{
     /* border: 1px solid; */
@@ -30,14 +38,14 @@ body{
     background-repeat: no-repeat;
     filter: grayscale(50%);
     box-shadow: 5px 0px 15px 0px rgba(0,0,0,0.5);
-    margin-top: 40px;
+    margin-top: 56px;
 }
 
 .welcome{
     color: white;
     position: relative;
     top: 15px;
-    left: 10%;
+    left: 7vw;
 }
 
 .welcome h4{
@@ -45,20 +53,47 @@ body{
     top: 220px;
 }
 
+.inputContainer{
+    display: inline-flex;
+    position: relative;
+    top: 240px;
+    width: 95vw;
+    margin: 0 0 0 5vw;
+    padding: 0;
+}
+
 .searchInput{
     position: relative;
     top: 60%;
-    width: 80%;
-    margin: 0 auto;
+    height: 40px;
+    border: none;
     border-bottom-left-radius: 30px;
     border-bottom-right-radius: 30px;
     border-top-left-radius: 30px;
     border-top-right-radius: 30px;
 }
 
+.searchBtn{
+    position: relative;
+    right: 5.5em;
+    font-size: 12px;
+    width: 80px;
+    height: 40px;
+    border: none;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+    background: linear-gradient(90deg, rgba(0,36,17) 10%, rgba(51,157,126) 70%, rgba(58,41,98,1) 100%);
+
+}
+
+
 
 .card{
     width: 200px;
+    box-shadow: 0.25em 0.25em 0.75em rgba(0, 0, 0, 0.25), 
+    0.125em 0.125em 0.25em rgba(0, 0, 0, 0.15);
    
 }
 
@@ -149,8 +184,7 @@ small{
 
 }
 
-/* .btn{
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-} */
+.btnLoad{
+    background: linear-gradient(90deg, rgba(0,36,17) 10%, rgba(51,157,126) 70%, rgba(58,41,98,1) 100%);
+    border: none;
+}
