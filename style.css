@@ -1,0 +1,156 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+body{
+    font-family: 'Varela Round', sans-serif;
+}
+
+.navbar{
+    background: #032541;
+    color: white;
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    width: 100vw;
+    justify-content: start;
+}
+
+.nav-item{
+    margin-right: 30px;
+
+}
+
+
+.searchBar{
+    /* border: 1px solid; */
+    height: 400px;
+    /* display: flex; */
+    background-image: url("https://image.tmdb.org/t/p/w1920_and_h600_multi_faces/uozb2VeD87YmhoUP1RrGWfzuCrr.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    filter: grayscale(50%);
+    box-shadow: 5px 0px 15px 0px rgba(0,0,0,0.5);
+    margin-top: 40px;
+}
+
+.welcome{
+    color: white;
+    position: relative;
+    top: 15px;
+    left: 10%;
+}
+
+.welcome h4{
+    position: relative;
+    top: 220px;
+}
+
+.searchInput{
+    position: relative;
+    top: 60%;
+    width: 80%;
+    margin: 0 auto;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    border-top-left-radius: 30px;
+    border-top-right-radius: 30px;
+}
+
+
+.card{
+    width: 200px;
+   
+}
+
+.card img{
+    width: 200px;
+    height: 300px;
+}
+
+.movieTitle{
+    text-align: center;
+    background-color: lightgrey;
+    height: 60px;
+    max-height: 100px;
+    font-weight: bold;
+    position: relative;
+    top: -33px;
+    z-index: 0;
+    overflow: auto;
+    border-bottom: 2px groove;
+    border-top: 1px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.movieTitle p{
+    padding-top: 10px;
+}
+
+
+small{
+    font-style: italic;
+}
+
+.release{
+    position: relative;
+    text-align: right;
+    right: 5px;
+    bottom: 30px;
+}
+
+
+.card-body{
+    height: 200px;
+    overflow: auto;
+    margin-top: 0;
+    padding-top: 0;
+    color: grey;
+    font-style: italic;
+    position: relative;
+    top: -15px;
+
+}
+
+.cardActions{
+    display: inline-flex;
+    justify-content: center;
+} 
+
+
+.cardActions a{
+    margin: 0 5px 10px 0;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    color: brown;
+
+}
+
+.rating{
+    margin: 0;
+    padding: 5px;
+    max-width: 35px;
+    position: relative;
+    left: 175px;
+    bottom: 20px;
+    color: white;
+    border: solid 1px lightgrey;
+    box-sizing: border-box;
+    /* width: 35px;
+    height: 35px; */
+    border-radius: 50%;
+    background-color: black;
+    box-shadow: 1px 0px 5px 0px rgba(0,0,0,0.5);
+    font-size: 14px;
+    z-index: 1;
+    text-align: center;
+
+}
+
+/* .btn{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+} */

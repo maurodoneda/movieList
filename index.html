@@ -1,34 +1,69 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="stylesheet"
+			href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+			integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
+			crossorigin="anonymous"
+		/>
+		<link
+			rel="stylesheet"
+			href="https://use.fontawesome.com/releases/v5.13.1/css/all.css"
+			integrity="sha384-xxzQGERXS00kBmZW/6qxqJPyxW3UR0BPsL4c8ILaIWXva5kFi7TxkIIaMiKtqV1Q"
+			crossorigin="anonymous"
+		/>
+		<link rel="stylesheet" href="style.css" />
 
-    <link rel="stylesheet" href="style.css">
+		<title>My movies</title>
+	</head>
+	<body>
+		<header>
+            <nav class="navbar navbar-expand-sm">
+                <ul class="navbar-nav">
+                    <li class="nav-item">My Movies</li>
+                    <li class="nav-item">WatchList</li>
+                    <li class="nav-item">Best Rated</li>
+                    <li class="nav-item">Segestions</li>
+                </ul>
+            </nav>
+        </header>
+		<section class="searchBar">
 
-    <title>My movies</title>
+            <div class="welcome">
+                <h1>Welcome!</h1>
+                <h4>Discover movies to watch and create your own watchlist!</h4>
+            </div>
+			<input
+				type="text"
+				class="form-control searchInput"
+                id="movieName"
+                placeholder="Search your movie..."
+				onkeydown="getData()"
+			/>
+		</section>
 
+		<div class="container">
+			<br />
 
-</head>
-<body>
+			<button
+				type="button"
+				id="btn"
+				class="btn btn-primary"
+				onclick="getData()"
+			>
+				Find Movies
+			</button>
 
-    <h1>My movies</h1>
-
-    <div class="container">
-
-        
-            <input type="text" class="form-control" id="movieName" onkeydown=loadData()>
-        
-
-        <br>
-
-        <button type="button" id="btn" class="btn btn-primary" onclick=loadData()>Find Movies</button>
-        
-        <br>
-        <br>
-        <div class= "container" id="moviesContainer"></div>
-
+			<br />
+			<br />
+			<div
+				class="container d-flex flex-wrap justify-content-center"
+				id="moviesContainer"
+			></div>
+			<!-- 
         <table class="table">
             <tr scope="row">
                 <td>1</td>
@@ -40,13 +75,9 @@
                 <td>2</td>
                 <td>3</td>
             </tr>
-        </table>
-        
-    </div>
+        </table> -->
+		</div>
 
-    
-
-
-    <script src="main.js"></script>
-</body>
+		<script src="main.js"></script>
+	</body>
 </html>
