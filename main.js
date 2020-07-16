@@ -1,51 +1,80 @@
-
-
-var request;
-
 var movieSearch = document.getElementById("movieName");
-
 var output = document.getElementById("moviesContainer");
-
-var request = `https://api.themoviedb.org/3/discover/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&region=US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=1&vote_count.gte=1000`;    
-
-fetchData(request);
-
-//----------------  ES-6 way ---------------------------- //
+var loadMore = document.getElementById("loadMore");
 var page = 1;
-function getData(){
-    var movieName = movieSearch.value;
-    request = `https://api.themoviedb.org/3/search/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&query=${movieName}&${page}&include_adult=false`
-    fetchData(request);
+var data;
+let totalPages;
+
+
+var initialRequest = `https://api.themoviedb.org/3/discover/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&region=US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=1&vote_count.gte=1000`;
+
+fetchMoviesData(initialRequest);
+
+
+
+
+function clearMoviesContainer() {
+    output.innerHTML = "";
 }
 
-async function fetchData(request){
+//-------------      Load more data        -------------- //
+
+loadMore.addEventListener("click", function () {
+    page++;
+    console.log(page);
+    if(movieSearch.value == ""){
+        let request = requestByPage();
+        fetchMoviesData(request); 
+    } else {
+        console.log(movieSearch.value);
+    }
     
+});
 
-        
-        // let initialResponse = await fetch(initialRequest);
-        // let initialData = await initialResponse.json();
-        // console.log(initialData);
+//----------------  ES-6 way ---------------------------- //
+
+function requestByName(name,page) {
+    return `https://api.themoviedb.org/3/search/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&query=${name}&page=${page}&include_adult=false`;
+}
+
+function requestByPage(){
+    return `https://api.themoviedb.org/3/discover/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&region=US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=${page}&vote_count.gte=1000`;
+
+}
+
+function getMoviesByName() {
+    let movieName = movieSearch.value;
+	let nameRequest = requestByName(movieName,page)
+    clearMoviesContainer();
+	fetchMoviesData(nameRequest);
+}
+
+function clearMoviesContainer(){
+    output.innerHTML = "";
+}
+
+
+async function fetchMoviesData(request) {
+	let response = await fetch(request);
+	data = await response.json();
+    console.log(data);    
+    printMoviesCards();	
+}
+
+
+function printMoviesCards(){
     
-        let response = await fetch(request);
-        let data = await response.json();
-        console.log(data);
+    let resultsList = data.results;
+    for (let i = 0; i < resultsList.length; i++) {
+		let movieTitle = resultsList[i].title;
+		let summary = resultsList[i].overview;
+		let rating = resultsList[i].vote_average;
+		let movieYear = resultsList[i].release_date.substring(0, 7);
+		let poster = resultsList[i].poster_path;
 
+		console.log(movieTitle);
 
-        var resultsList = data.results;
-            
-            output.innerHTML = "";
-            
-            for (var i=0; i < resultsList.length; i++){
-                
-                var movieTitle = resultsList[i].title;
-                var summary = resultsList[i].overview;
-                var rating = resultsList[i].vote_average;
-                var movieYear = resultsList[i].release_date.substring(0,7);
-                var poster = resultsList[i].poster_path;
-                
-                console.log(movieTitle); 
-                
-                output.innerHTML += `<div class="card m-2">
+		output.innerHTML += `<div class="card m-2">
                                         <img class="card-img-top" alt="Card img ${movieTitle}" src="https://image.tmdb.org/t/p/w200${poster}"/>
                                         <div class="rating">${rating}</div> 
                                         <div class="movieTitle">
@@ -65,14 +94,12 @@ async function fetchData(request){
                                                 <a href="#" class="action playBtn"><i class="fas fa-play-circle fa-2x"></i></a>
                                             </div>
                                     </div>`;
-            }
     }
 
+}
 
 
-
-    //----------------  Old way ---------------------------- //
-
+//----------------  Old way ---------------------------- //
 
 // movieSearch.addEventListener("keydown",({key}) => {
 //     if (key === "Enter") {
@@ -84,52 +111,45 @@ async function fetchData(request){
 // function loadData(){
 
 //     var movieName = movieSearch.value;
-    
+
 //     request = `https://api.themoviedb.org/3/search/movie?api_key=ef3c6e234a561a62689d59b053e4985b&query=${movieName}`
-  
 
-    // var xhttp = new XMLHttpRequest();
-    
-    // xhttp.onreadystatechange = function (){
-    //     if(xhttp.readyState == 4 || xhttp.readyState == 200){
-    //         var dataResponse = xhttp.responseText;
-    //         // console.log(xhttp.responseText);
-            
-    //         var movies = JSON.parse(dataResponse);
-            
-    //         var resultsList = movies.results;
-            
-    //         output.innerHTML = "";
-            
-    //         for (var i=0; i < resultsList.length; i++){
-    //             var movieTitle;
-    //             movieTitle = resultsList[i].original_title;
-    //             console.log(movieTitle); 
-    //             var poster;
-    //             poster = resultsList[i].poster_path;
-    //             console.log(poster);
-    //             output.innerHTML += `<div>
-    //                                     <img src = "https://image.tmdb.org/t/p/w200${poster}"/>
-    //                                    <p>${movieTitle}</p> 
-    //                                 </div>`;
-    //         }
-            
-            
-            // console.log(resultsList);
-            // console.log(location);
-            // var city = location.name;
-            // var country = location.sys.country;
-    
-            // console.log(movies);
-            // console.log(celcius);
-    
-    
-        
-    //     }
-    // };
+// var xhttp = new XMLHttpRequest();
 
-    // xhttp.open("GET", request, true);
-    // xhttp.send();
+// xhttp.onreadystatechange = function (){
+//     if(xhttp.readyState == 4 || xhttp.readyState == 200){
+//         var dataResponse = xhttp.responseText;
+//         // console.log(xhttp.responseText);
 
-    
-    
+//         var movies = JSON.parse(dataResponse);
+
+//         var resultsList = movies.results;
+
+//         output.innerHTML = "";
+
+//         for (var i=0; i < resultsList.length; i++){
+//             var movieTitle;
+//             movieTitle = resultsList[i].original_title;
+//             console.log(movieTitle);
+//             var poster;
+//             poster = resultsList[i].poster_path;
+//             console.log(poster);
+//             output.innerHTML += `<div>
+//                                     <img src = "https://image.tmdb.org/t/p/w200${poster}"/>
+//                                    <p>${movieTitle}</p>
+//                                 </div>`;
+//         }
+
+// console.log(resultsList);
+// console.log(location);
+// var city = location.name;
+// var country = location.sys.country;
+
+// console.log(movies);
+// console.log(celcius);
+
+//     }
+// };
+
+// xhttp.open("GET", request, true);
+// xhttp.send();
