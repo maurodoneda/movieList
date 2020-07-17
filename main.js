@@ -1,78 +1,81 @@
-var movieSearch = document.getElementById("movieName");
-var output = document.getElementById("moviesContainer");
-var loadMore = document.getElementById("loadMore");
-var page = 1;
-var data;
+let movieSearch = document.getElementById("movieName");
+let output = document.getElementById("moviesContainer");
+let loadMore = document.getElementById("loadMore");
+let page = 1;
+let clearScreen = true;
 let totalPages;
 
 
-var initialRequest = `https://api.themoviedb.org/3/discover/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&region=US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=1&vote_count.gte=1000`;
-
-fetchMoviesData(initialRequest);
+let initialRequest = `https://api.themoviedb.org/3/discover/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&region=US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=1&vote_count.gte=1000`;
 
 
+printMoviesCards(initialRequest,clearScreen);
 
 
-function clearMoviesContainer() {
-    output.innerHTML = "";
-}
+//----------------  ES-6 way usign asyncrunous functions and fetch API ---------------------------- //
 
-//-------------      Load more data        -------------- //
-
-loadMore.addEventListener("click", function () {
-    page++;
-    console.log(page);
-    if(movieSearch.value == ""){
-        let request = requestByPage();
-        fetchMoviesData(request); 
-    } else {
-        console.log(movieSearch.value);
-    }
-    
-});
-
-//----------------  ES-6 way ---------------------------- //
 
 function requestByName(name,page) {
     return `https://api.themoviedb.org/3/search/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&query=${name}&page=${page}&include_adult=false`;
 }
 
-function requestByPage(){
+function requestNewPage(page){
     return `https://api.themoviedb.org/3/discover/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&region=US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=${page}&vote_count.gte=1000`;
 
 }
 
+
+//---------------------- event case the user change the search input --------------- //
+
 function getMoviesByName() {
+    page = 1;
+    clearScreen = true;
     let movieName = movieSearch.value;
-	let nameRequest = requestByName(movieName,page)
-    clearMoviesContainer();
-	fetchMoviesData(nameRequest);
-}
-
-function clearMoviesContainer(){
-    output.innerHTML = "";
+    let nameRequest = requestByName(movieName,page);
+    printMoviesCards(nameRequest,clearScreen);
 }
 
 
-async function fetchMoviesData(request) {
-	let response = await fetch(request);
-	data = await response.json();
-    console.log(data);    
-    printMoviesCards();	
-}
+//-------------      Load more data        -------------- //
 
-
-function printMoviesCards(){
+loadMore.addEventListener("click", function () {
+    page++;
+    let input = movieSearch.value;
+    if(input == ""){
+        request = requestNewPage(page);
+        printMoviesCards(request); 
+    } else {
+        clearScreen = false;
+        request = requestByName(input,page);
+        printMoviesCards(request,clearScreen);
+    }
     
-    let resultsList = data.results;
-    for (let i = 0; i < resultsList.length; i++) {
-		let movieTitle = resultsList[i].title;
-		let summary = resultsList[i].overview;
-		let rating = resultsList[i].vote_average;
-		let movieYear = resultsList[i].release_date.substring(0, 7);
-		let poster = resultsList[i].poster_path;
+});
+    
+ // ------------------- fetching data async and printing to screen ------------------------ //
 
-		console.log(movieTitle);
+
+async function printMoviesCards(request,clearScreen){
+        
+    let response = await fetch(request);
+    let data = await response.json();
+    console.log(data);
+    let resultArray = data.results;
+
+    if(clearScreen){
+        output.innerHTML = "";
+    }
+    
+
+    for (let i = 0; i < resultArray.length; i++) {
+		let movieTitle = resultArray[i].title;
+		let summary = resultArray[i].overview;
+		let rating = resultArray[i].vote_average;
+		let movieYear = resultArray[i].release_date.substring(0, 7);
+		let poster = resultArray[i].poster_path;
+
+        console.log(movieTitle);
+        
 
 		output.innerHTML += `<div class="card m-2">
                                         <img class="card-img-top" alt="Card img ${movieTitle}" src="https://image.tmdb.org/t/p/w200${poster}"/>
@@ -95,7 +98,6 @@ function printMoviesCards(){
                                             </div>
                                     </div>`;
     }
-
 }
 
 
@@ -123,16 +125,16 @@ function printMoviesCards(){
 
 //         var movies = JSON.parse(dataResponse);
 
-//         var resultsList = movies.results;
+//         var resultArray = movies.results;
 
 //         output.innerHTML = "";
 
-//         for (var i=0; i < resultsList.length; i++){
+//         for (var i=0; i < resultArray.length; i++){
 //             var movieTitle;
-//             movieTitle = resultsList[i].original_title;
+//             movieTitle = resultArray[i].original_title;
 //             console.log(movieTitle);
 //             var poster;
-//             poster = resultsList[i].poster_path;
+//             poster = resultArray[i].poster_path;
 //             console.log(poster);
 //             output.innerHTML += `<div>
 //                                     <img src = "https://image.tmdb.org/t/p/w200${poster}"/>
@@ -140,7 +142,7 @@ function printMoviesCards(){
 //                                 </div>`;
 //         }
 
-// console.log(resultsList);
+// console.log(resultArray);
 // console.log(location);
 // var city = location.name;
 // var country = location.sys.country;
