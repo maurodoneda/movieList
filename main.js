@@ -121,6 +121,8 @@ async function addToWatchList(movieId) {
     alert(`${movieObj.title} has been added to your watchList succesfully!`);
 }
 
+let trailerBox = document.getElementById("trailer");
+
 
 async function watchTrailer(movieId) {
 
@@ -135,32 +137,25 @@ async function watchTrailer(movieId) {
 			site: `${results[0].site}`,   
     }
 
-    output.innerHTML = `<div class="card m-2">
-    <iframe width="965" height="401" src="https://www.youtube.com/embed/${video.key}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>`
+        trailerBox.innerHTML = `
+        <button class="closeBtn">X</button>
+        <div class="videoWrapper">
+        <iframe width="965" height="401" src="https://www.youtube.com/embed/${video.key}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>`
+            
+        trailerBox.style = "display: block";
 
-
-
-    // console.log(movieObj);
-    // myMoviesArray.push(movieObj);
-    // localStorage.setItem("movieList", JSON.stringify(myMoviesArray));
-    // console.log(myMoviesArray);
-    // alert(`${movieObj.title} has been added to your watchList succesfully!`);
 }
 
 
-let trailerBox = document.getElementById("trailer");
-let playTrailerBtn = document.getElementById("playTrailer")
+let closeBtn = document.querySelector(".closeBtn");
 
-playTrailerBtn.addEventListener("click", function(){
+closeBtn.addEventListener("click", function(){
 
-    
-    trailerBox.style = "display: block";
-    trailerBox.style = "transform: translateY(-80vh)";
+    trailerBox.style = "display: none";
+
 
 })
-
-
 
 
 

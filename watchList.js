@@ -31,12 +31,6 @@ for(let i =0; i<movieList.length;i++){
                 <h6>Summary:</h6>    
                 <p class="card-text">${summary}</p>  
             </div>
-            
-            <div class="container cardActions">
-            <a type="button" class="action addBtn" onclick = "addToWatchList(${movieId})"><i class="fas fa-plus-circle fa-2x"></i></a>
-            <br>
-            <a type="button" class="action playBtn" id="playTrailer" onclick = "watchTrailer(${movieId})"><i class="fas fa-play-circle fa-2x"></i></a>
-          </div>
         </div>
     </div>`;
 
