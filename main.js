@@ -5,77 +5,69 @@ let page = 1;
 let clearScreen = true;
 let totalPages;
 
+let initialRequest = `https://api.themoviedb.org/3/discover/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&region=US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=1&vote_count.gte=3000`;
 
-let initialRequest = `https://api.themoviedb.org/3/discover/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&region=US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=1&vote_count.gte=1000`;
+printMoviesCards(initialRequest, clearScreen);
 
+//----------------  ES-6 way usign asyncronous functions and fetch API ---------------------------- //
 
-printMoviesCards(initialRequest,clearScreen);
-
-
-//----------------  ES-6 way usign asyncrunous functions and fetch API ---------------------------- //
-
-
-function requestByName(name,page) {
-    return `https://api.themoviedb.org/3/search/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&query=${name}&page=${page}&include_adult=false`;
+function requestByName(name, page) {
+	return `https://api.themoviedb.org/3/search/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&query=${name}&page=${page}&include_adult=false`;
 }
 
-function requestNewPage(page){
-    return `https://api.themoviedb.org/3/discover/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&region=US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=${page}&vote_count.gte=1000`;
-
+function requestNewPage(page) {
+	return `https://api.themoviedb.org/3/discover/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&region=US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=${page}&vote_count.gte=1000`;
 }
-
 
 //---------------------- event case the user change the search input --------------- //
 
 function getMoviesByName() {
-    page = 1;
-    clearScreen = true;
-    let movieName = movieSearch.value;
-    let nameRequest = requestByName(movieName,page);
-    printMoviesCards(nameRequest,clearScreen);
+	page = 1;
+	clearScreen = true;
+	let movieName = movieSearch.value;
+	let nameRequest = requestByName(movieName, page);
+	printMoviesCards(nameRequest, clearScreen);
 }
-
 
 //-------------      Load more data        -------------- //
 
 loadMore.addEventListener("click", function () {
-    page++;
-    let input = movieSearch.value;
-    if(input == ""){
-        request = requestNewPage(page);
-        printMoviesCards(request); 
-    } else {
-        clearScreen = false;
-        request = requestByName(input,page);
-        printMoviesCards(request,clearScreen);
-    }
-    
+	page++;
+	let input = movieSearch.value;
+	if (input == "") {
+		request = requestNewPage(page);
+		printMoviesCards(request);
+	} else {
+		clearScreen = false;
+		request = requestByName(input, page);
+		printMoviesCards(request, clearScreen);
+	}
 });
+
+// ------------------- fetching data async and printing to screen ------------------------ //
+
+
+async function printMoviesCards(request, clearScreen) {
     
- // ------------------- fetching data async and printing to screen ------------------------ //
-
-
-async function printMoviesCards(request,clearScreen){
-        
     let response = await fetch(request);
-    let data = await response.json();
-    console.log(data);
-    let resultArray = data.results;
+	let data = await response.json();
+	console.log(data);
+	let resultArray = data.results;
 
-    if(clearScreen){
-        output.innerHTML = "";
-    }
-    
+	if (clearScreen) {
+		output.innerHTML = "";
+	}
 
-    for (let i = 0; i < resultArray.length; i++) {
+
+	for (let i = 0; i < resultArray.length; i++) {
 		let movieTitle = resultArray[i].title;
 		let summary = resultArray[i].overview;
 		let rating = resultArray[i].vote_average;
 		let movieYear = resultArray[i].release_date.substring(0, 7);
-		let poster = resultArray[i].poster_path;
+        let poster = resultArray[i].poster_path;
+        let movieId = resultArray[i].id;
 
-        console.log(movieTitle);
-        
+		console.log(movieTitle);
 
 		output.innerHTML += `<div class="card m-2">
                                         <img class="card-img-top" alt="Card img ${movieTitle}" src="https://image.tmdb.org/t/p/w200${poster}"/>
@@ -92,14 +84,91 @@ async function printMoviesCards(request,clearScreen){
                                             </div>   
                                             </div>
                                             <div class="container cardActions">
-                                                <a href="#" class="action addBtn"><i class="fas fa-plus-circle fa-2x"></i></a>
-                                                <br>
-                                                <a href="#" class="action playBtn"><i class="fas fa-play-circle fa-2x"></i></a>
+                                              <a type="button" class="action addBtn" onclick = "addToWatchList(${movieId})"><i class="fas fa-plus-circle fa-2x"></i></a>
+                                              <br>
+                                              <a type="button" class="action playBtn" id="playTrailer" onclick = "watchTrailer(${movieId})"><i class="fas fa-play-circle fa-2x"></i></a>
                                             </div>
                                     </div>`;
-    }
+
+		
+	}
+   
 }
 
+
+let myMoviesArray = localStorage.getItem("movieList");
+myMoviesArray = (myMoviesArray) ? JSON.parse(myMoviesArray) : [];
+
+async function addToWatchList(movieId) {
+
+    let requestById = `https://api.themoviedb.org/3/movie/${movieId}?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US`;
+    let response = await fetch(requestById);
+	let data = await response.json();
+	// console.log(data);
+    
+    let movieObj = {
+			title: `${data.title}`,
+			poster: `${data.poster_path}`,
+			rating: `${data.vote_average}`,
+			release: `${data.release_date.substring(0, 7)}`,
+			summary: `${data.overview}`     
+    }
+
+    // console.log(movieObj);
+    myMoviesArray.push(movieObj);
+    localStorage.setItem("movieList", JSON.stringify(myMoviesArray));
+    console.log(myMoviesArray);
+    alert(`${movieObj.title} has been added to your watchList succesfully!`);
+}
+
+
+async function watchTrailer(movieId) {
+
+    let requestVideo = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US`;
+    let response = await fetch(requestVideo);
+    let data = await response.json();
+    let results = data.results;
+	console.log(results);
+    
+    let video = {
+			key: `${results[0].key}`,
+			site: `${results[0].site}`,   
+    }
+
+    output.innerHTML = `<div class="card m-2">
+    <iframe width="965" height="401" src="https://www.youtube.com/embed/${video.key}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>`
+
+
+
+    // console.log(movieObj);
+    // myMoviesArray.push(movieObj);
+    // localStorage.setItem("movieList", JSON.stringify(myMoviesArray));
+    // console.log(myMoviesArray);
+    // alert(`${movieObj.title} has been added to your watchList succesfully!`);
+}
+
+
+let trailerBox = document.getElementById("trailer");
+let playTrailerBtn = document.getElementById("playTrailer")
+
+playTrailerBtn.addEventListener("click", function(){
+
+    
+    trailerBox.style = "display: block";
+    trailerBox.style = "transform: translateY(-80vh)";
+
+})
+
+
+
+
+
+// addButtons.forEach(function (currentBtn) {
+//   currentBtn.addEventListener("click", addToWatchList);
+// });
+
+// ----------   Adding a new movie to watchlist   ----------------------
 
 //----------------  Old way ---------------------------- //
 

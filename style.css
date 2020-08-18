@@ -202,3 +202,20 @@ small{
     background: linear-gradient(90deg, rgba(0,36,17) 10%, rgba(51,157,126) 70%, rgba(58,41,98,1) 100%);
     border: none;
 }
+
+/* ----- trailer Box -------- */
+
+
+.trailerContainer{
+
+    
+    width: 80vw;
+    height: 80vh;
+    border: 1px solid black;
+    background: black;
+    opacity: 0.5;
+    margin-bottom: 30px;
+    transition: ease-in-out 0.5s;
+    
+
+}
