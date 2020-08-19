@@ -1,13 +1,17 @@
+
+
 let movieSearch = document.getElementById("movieName");
 let output = document.getElementById("moviesContainer");
 let loadMore = document.getElementById("loadMore");
 let page = 1;
 let clearScreen = true;
 let totalPages;
-
 let initialRequest = `https://api.themoviedb.org/3/discover/movie?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US&region=US&sort_by=vote_average.desc&include_adult=false&include_video=false&page=1&vote_count.gte=3000`;
 
 printMoviesCards(initialRequest, clearScreen);
+
+
+
 
 //----------------  ES-6 way usign asyncronous functions and fetch API ---------------------------- //
 
@@ -44,7 +48,7 @@ loadMore.addEventListener("click", function () {
 	}
 });
 
-// ------------------- fetching data async and printing to screen ------------------------ //
+// ------------------- fetching data async and printing cards to screen ------------------------ //
 
 async function printMoviesCards(request, clearScreen) {
 	let response = await fetch(request);
@@ -94,6 +98,12 @@ async function printMoviesCards(request, clearScreen) {
 	}
 }
 
+
+
+
+
+// ----------- Get the video from Yoube and open a Trailer container ---------------  //
+
 let myMoviesArray = localStorage.getItem("movieList");
 myMoviesArray = myMoviesArray ? JSON.parse(myMoviesArray) : [];
 
@@ -111,14 +121,14 @@ async function addToWatchList(movieId) {
 		summary: `${data.overview}`,
 		id: movieId,
 	};
-
-	// console.log(movieObj);
 	myMoviesArray.push(movieObj);
 	localStorage.setItem("movieList", JSON.stringify(myMoviesArray));
 	console.log(myMoviesArray);
 	alert(`${movieObj.title} has been added to your watchList succesfully!`);
 }
 
+
+// ----------- Get the video from Yoube and open a Trailer container ---------------  //
 
 
 let trailerBox = document.getElementById("trailerBox");
@@ -146,6 +156,9 @@ async function watchTrailer(movieId) {
 	bodyOverlay.style.display = "block";
 }
 
+
+// ----------- function to close the Trailer container ---------------  //
+
 let closeBtn = document.getElementsByClassName("closeBtn");
 
 for (let i = 0; i < closeBtn.length; i++) {
@@ -157,22 +170,18 @@ for (let i = 0; i < closeBtn.length; i++) {
 
 
 
-// function showText() {
-// 	let addBtn = document.getElementsByClassName("addBtn");
-// 	let addTxt = document.getElementsByClassName("addTxt");
-// 	for (let i = 0; i < addBtn.length; i++) {
-// 		addTxt[i].style.display = "block";
-// 		addBtn[i].style.color = "white";
-// 	}
-// }
 
-// addButtons.forEach(function (currentBtn) {
-//   currentBtn.addEventListener("click", addToWatchList);
-// });
 
-// ----------   Adding a new movie to watchlist   ----------------------
 
-//----------------  Old way ---------------------------- //
+
+
+
+
+
+
+
+
+//----------------  Old way of fetching data---------------------------- //
 
 // movieSearch.addEventListener("keydown",({key}) => {
 //     if (key === "Enter") {

@@ -1,0 +1,14 @@
+.watchList{
+    background-image: url("https://i.pinimg.com/originals/5c/22/87/5c2287340463aca02e194d5a91243d67.jpg");
+    filter: grayscale(10%);
+    min-height: 100vh;
+    width: 100%;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    overflow-y: scroll;
+    background-attachment: fixed;
+    color: black;
+    
+}
+
