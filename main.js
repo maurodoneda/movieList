@@ -46,10 +46,8 @@ loadMore.addEventListener("click", function () {
 
 // ------------------- fetching data async and printing to screen ------------------------ //
 
-
 async function printMoviesCards(request, clearScreen) {
-    
-    let response = await fetch(request);
+	let response = await fetch(request);
 	let data = await response.json();
 	console.log(data);
 	let resultArray = data.results;
@@ -58,19 +56,21 @@ async function printMoviesCards(request, clearScreen) {
 		output.innerHTML = "";
 	}
 
-
 	for (let i = 0; i < resultArray.length; i++) {
 		let movieTitle = resultArray[i].title;
 		let summary = resultArray[i].overview;
 		let rating = resultArray[i].vote_average;
 		let movieYear = resultArray[i].release_date.substring(0, 7);
-        let poster = resultArray[i].poster_path;
-        let movieId = resultArray[i].id;
+		let poster = resultArray[i].poster_path;
+		let movieId = resultArray[i].id;
 
 		console.log(movieTitle);
 
 		output.innerHTML += `<div class="card m-2">
-                                        <img class="card-img-top" alt="Card img ${movieTitle}" src="https://image.tmdb.org/t/p/w200${poster}"/>
+                                            <div class="imgWrap" id="playTrailer" onclick = "watchTrailer(${movieId})" type="button">
+                                                <img class="card-img-top" alt="Card img ${movieTitle}" src="https://image.tmdb.org/t/p/w200${poster}"/>
+                                                <div class="clickToSee"><i class="fas fa-play-circle fa-2x"></i><br> Click to watch Trailer</div>
+                                            </div>
                                         <div class="rating">${rating}</div> 
                                         <div class="movieTitle">
                                         <p>${movieTitle}</p>
@@ -84,80 +84,87 @@ async function printMoviesCards(request, clearScreen) {
                                             </div>   
                                             </div>
                                             <div class="container cardActions">
+                                            <div class="addTxt">add to watchlist</div> 
                                               <a type="button" class="action addBtn" onclick = "addToWatchList(${movieId})"><i class="fas fa-plus-circle fa-2x"></i></a>
                                               <br>
                                               <a type="button" class="action playBtn" id="playTrailer" onclick = "watchTrailer(${movieId})"><i class="fas fa-play-circle fa-2x"></i></a>
+                                              <div class="trailerTxt">watch trailer</div> 
                                             </div>
                                     </div>`;
-
-		
 	}
-   
 }
-
 
 let myMoviesArray = localStorage.getItem("movieList");
-myMoviesArray = (myMoviesArray) ? JSON.parse(myMoviesArray) : [];
+myMoviesArray = myMoviesArray ? JSON.parse(myMoviesArray) : [];
 
 async function addToWatchList(movieId) {
-
-    let requestById = `https://api.themoviedb.org/3/movie/${movieId}?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US`;
-    let response = await fetch(requestById);
+	let requestById = `https://api.themoviedb.org/3/movie/${movieId}?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US`;
+	let response = await fetch(requestById);
 	let data = await response.json();
 	// console.log(data);
-    
-    let movieObj = {
-			title: `${data.title}`,
-			poster: `${data.poster_path}`,
-			rating: `${data.vote_average}`,
-			release: `${data.release_date.substring(0, 7)}`,
-			summary: `${data.overview}`     
-    }
 
-    // console.log(movieObj);
-    myMoviesArray.push(movieObj);
-    localStorage.setItem("movieList", JSON.stringify(myMoviesArray));
-    console.log(myMoviesArray);
-    alert(`${movieObj.title} has been added to your watchList succesfully!`);
+	let movieObj = {
+		title: `${data.title}`,
+		poster: `${data.poster_path}`,
+		rating: `${data.vote_average}`,
+		release: `${data.release_date.substring(0, 7)}`,
+		summary: `${data.overview}`,
+		id: movieId,
+	};
+
+	// console.log(movieObj);
+	myMoviesArray.push(movieObj);
+	localStorage.setItem("movieList", JSON.stringify(myMoviesArray));
+	console.log(myMoviesArray);
+	alert(`${movieObj.title} has been added to your watchList succesfully!`);
 }
 
-let trailerBox = document.getElementById("trailer");
 
+
+let trailerBox = document.getElementById("trailerBox");
+let trailerContainer = document.querySelector(".trailerContainer");
 
 async function watchTrailer(movieId) {
-
-    let requestVideo = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US`;
-    let response = await fetch(requestVideo);
-    let data = await response.json();
-    let results = data.results;
+	let requestVideo = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=ef3c6e234a561a62689d59b053e4985b&language=en-US`;
+	let response = await fetch(requestVideo);
+	let data = await response.json();
+	let results = data.results;
 	console.log(results);
-    
-    let video = {
-			key: `${results[0].key}`,
-			site: `${results[0].site}`,   
-    }
 
-        trailerBox.innerHTML = `
-        <button class="closeBtn">X</button>
+	let video = {
+		key: `${results[0].key}`,
+		site: `${results[0].site}`,
+	};
+
+	trailerBox.innerHTML = `
         <div class="videoWrapper">
         <iframe width="965" height="401" src="https://www.youtube.com/embed/${video.key}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>`
-            
-        trailerBox.style = "display: block";
+        </div>`;
 
+	trailerContainer.style.display = "block";
+	let bodyOverlay = document.getElementById("bodyOverlay");
+	bodyOverlay.style.display = "block";
+}
+
+let closeBtn = document.getElementsByClassName("closeBtn");
+
+for (let i = 0; i < closeBtn.length; i++) {
+	closeBtn[i].addEventListener("click", function () {
+		trailerContainer.style.display = "none";
+		bodyOverlay.style.display = "none";
+	});
 }
 
 
-let closeBtn = document.querySelector(".closeBtn");
 
-closeBtn.addEventListener("click", function(){
-
-    trailerBox.style = "display: none";
-
-
-})
-
-
+// function showText() {
+// 	let addBtn = document.getElementsByClassName("addBtn");
+// 	let addTxt = document.getElementsByClassName("addTxt");
+// 	for (let i = 0; i < addBtn.length; i++) {
+// 		addTxt[i].style.display = "block";
+// 		addBtn[i].style.color = "white";
+// 	}
+// }
 
 // addButtons.forEach(function (currentBtn) {
 //   currentBtn.addEventListener("click", addToWatchList);
