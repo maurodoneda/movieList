@@ -197,7 +197,7 @@ small{
     padding: 2px;
     justify-content: center;
     align-items: center;
-    background-color: navy;
+    background: linear-gradient(90deg, rgba(0,36,17) 30%, rgba(51,157,126) 90%);
     color: white;
     width: 100px;
     font-size: 12px;
