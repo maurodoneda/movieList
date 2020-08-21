@@ -88,11 +88,15 @@ async function printMoviesCards(request, clearScreen) {
                                             </div>   
                                             </div>
                                             <div class="container cardActions">
-                                            <div class="addTxt">add to watchlist</div> 
+											<div class="buttonWrapper">
+											<div class="addTxt">Add to watchlist</div> 
                                               <a type="button" class="action addBtn" onclick = "addToWatchList(${movieId})"><i class="fas fa-plus-circle fa-2x"></i></a>
-                                              <br>
+											</div> 
+											  <br>
+											<div class="buttonWrapper">	
                                               <a type="button" class="action playBtn" id="playTrailer" onclick = "watchTrailer(${movieId})"><i class="fas fa-play-circle fa-2x"></i></a>
-                                              <div class="trailerTxt">watch trailer</div> 
+											  <div class="trailerTxt">Watch trailer</div>
+											</div> 
                                             </div>
                                     </div>`;
 	}
